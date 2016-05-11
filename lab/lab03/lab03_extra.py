@@ -26,6 +26,32 @@ def cycle(f1, f2, f3):
     """
     "*** YOUR CODE HERE ***"
 
+    def cycle(n):
+        
+        def doJob(x):
+
+            if n == 0:
+                return x
+
+            result = x
+            count_of_cycle = n//3;
+            flag_job = n%3;
+
+            while count_of_cycle>0:
+                result = f3(f2(f1(result)))
+                count_of_cycle -= 1
+
+            if flag_job == 1:
+                result = f1(result)
+            elif flag_job == 2:
+                result = f2(f1(result))
+
+            return result
+
+        return doJob
+
+    return cycle
+
 # Q10
 def lambda_curry2(func):
     """
@@ -37,7 +63,7 @@ def lambda_curry2(func):
     8
     """
     "*** YOUR CODE HERE ***"
-    return ______
+    return lambda n : lambda x : print(func(x,n))
 
 # Q12
 def paths(m, n):
@@ -54,6 +80,11 @@ def paths(m, n):
     1
     """
     "*** YOUR CODE HERE ***"
+    if m==1 or n==1:
+        return 1
+    
+    return paths(m,n-1) + paths(m-1,n)
+
 
 # Q13
 def gcd(a, b):
@@ -70,3 +101,6 @@ def gcd(a, b):
     40
     """
     "*** YOUR CODE HERE ***"
+    if b == 0:
+        return a
+    return gcd(b,a%b)
