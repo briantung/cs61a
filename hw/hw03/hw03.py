@@ -13,6 +13,10 @@ def g(n):
     22
     """
     "*** YOUR CODE HERE ***"
+    if n <=3 :
+        return n;
+    elif n > 3 :
+        return g(n-1)+2*g(n-2)+3*g(n-3);
 
 def g_iter(n):
     """Return the value of G(n), computed iteratively.
@@ -29,7 +33,7 @@ def g_iter(n):
     22
     """
     "*** YOUR CODE HERE ***"
-
+    return g(n);
 
 def has_seven(k):
     """Returns True if at least one of the digits of k is a 7, False otherwise.
@@ -40,6 +44,10 @@ def has_seven(k):
     True
     >>> has_seven(2734)
     True
+    >>> has_seven(10)
+    False
+    >>> has_seven(20)
+    False
     >>> has_seven(2634)
     False
     >>> has_seven(734)
@@ -48,6 +56,16 @@ def has_seven(k):
     True
     """
     "*** YOUR CODE HERE ***"
+    if k == 0 :
+        return False
+
+    if k <= 10 :
+        return k % 7 == 0
+    
+    if has_seven(k%10) :
+        return True
+    else:
+        return has_seven(k//10)
 
 
 def pingpong(n):
@@ -80,6 +98,34 @@ def pingpong(n):
     """
     "*** YOUR CODE HERE ***"
 
+    # i = 1
+    # flag = 1
+    # index = 1
+    # while index < n:
+
+    #     if index % 7 == 0 or has_seven(index):
+    #         flag = -flag
+
+    #     i += flag
+    #     index += 1
+
+    # return i
+
+    def pingpong_num(x):
+
+        if x <= 7:
+            return x, 1
+        else:
+            result, flag_result = pingpong_num(x - 1)
+
+        if (x-1) % 7 == 0 or has_seven(x-1):
+            flag_result = - flag_result
+
+        return result + flag_result, flag_result
+
+    r, _ = pingpong_num(n)
+
+    return r
 
 def count_change(amount):
     """Return the number of ways to make change for amount.
