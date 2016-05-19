@@ -140,6 +140,19 @@ def count_change(amount):
     9828
     """
     "*** YOUR CODE HERE ***"
+    
+    def count(amount,coin):
+        if amount == 0:
+            return 1
+        elif amount < 0:
+            return 0
+        elif coin > amount:
+            return 0
+        else:
+            return count(amount-coin,coin) + count(amount,2*coin)
+
+    return count(amount,1)
+
 
 
 def towers_of_hanoi(n, start, end):
@@ -165,6 +178,17 @@ def towers_of_hanoi(n, start, end):
     """
     assert 0 < start <= 3 and 0 < end <= 3 and start != end, "Bad start/end"
     "*** YOUR CODE HERE ***"
+    
+    def move(form,to):
+        print("Move the top disk from rod %d to rod %d" % (form,to))
+
+    if n == 1:
+        move(start,end)
+    else:
+        other = 6 - start - end
+        towers_of_hanoi(n-1, start, other)
+        towers_of_hanoi(1, start, end)
+        towers_of_hanoi(n-1, other, end)
 
 
 from operator import sub, mul
@@ -175,4 +199,5 @@ def make_anonymous_factorial():
     >>> make_anonymous_factorial()(5)
     120
     """
-    return 'YOUR_EXPRESSION_HERE'
+
+    return (lambda f: lambda h: f(h, f))(lambda n, f: 1 if n == 1 else mul(n, f(sub(n, 1), f)))
