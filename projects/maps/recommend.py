@@ -13,7 +13,10 @@ def find_closest(location, centroids):
     >>> find_closest([3, 4], [[0, 0], [2, 3], [4, 3], [5, 5]])
     [2, 3]
     """
-    "*** YOUR CODE HERE ***"
+
+    return min(centroids, key = lambda centroid: distance(location,centroid))
+
+
 
 def group_by_first(pairs):
     """Return a list of pairs that relates each unique key in [key, value]
@@ -40,11 +43,22 @@ def group_by_centroid(restaurants, centroids):
     the result, along with the other restaurants nearest to the same centroid.
     No empty lists should appear in the result.
     """
-    "*** YOUR CODE HERE ***"
+    pairs = []
+    for restaurant in restaurants:
+        closest_Centroid = find_closest(restaurant_location(restaurant),centroids)
+        pairs.append([closest_Centroid,restaurant])
+    return group_by_first(pairs)
 
 def find_centroid(restaurants):
     """Return the centroid of the locations of RESTAURANTS."""
-    "*** YOUR CODE HERE ***"
+    locations = []
+    latitudes,longitudes = [],[]
+    for restaurant in restaurants:
+        latitudes.append(restaurant_location(restaurant)[0])
+        longitudes.append(restaurant_location(restaurant)[1])
+
+    return [mean(latitudes), mean(longitudes)]
+    
 
 def k_means(restaurants, k, max_updates=100):
     """Use k-means to group RESTAURANTS by location into K clusters."""
@@ -57,6 +71,8 @@ def k_means(restaurants, k, max_updates=100):
         old_centroids = centroids
         "*** YOUR CODE HERE ***"
         n += 1
+        clusters = group_by_centroid(restaurants,centroids)
+        centroids = [find_centroid(restaurants) for restaurants in clusters]
     return centroids
 
 def find_predictor(user, restaurants, feature_fn):

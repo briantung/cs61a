@@ -16,7 +16,7 @@ def map_and_filter(s, map_fn, filter_fn):
     [1, 9, 25]
     """
     "*** YOUR CODE HERE ***"
-    return ['REPLACE THIS WITH YOUR LIST COMPREHENSION']
+    return [map_fn(x) for x in s if filter_fn(x)]
 
 def key_of_min_value(d):
     """Returns the key in dict D that corresponds to the minimum value of D.
@@ -28,7 +28,7 @@ def key_of_min_value(d):
     'c'
     """
     "*** YOUR CODE HERE ***"
-    return min('REPLACE THIS WITH YOUR SOLUTION')
+    return min(d.keys(),key = lambda x:d[x])
 
 def zip(*sequences):
     """Returns a list of lists, where the i-th list contains the i-th
@@ -60,6 +60,7 @@ def enumerate(s, start=0):
     [[5, 'f'], [6, 'i'], [7, 'v'], [8, 'e']]
     """
     "*** YOUR CODE HERE ***"
+    return zip(range(start,start + len(s)),s);
 
 def distance(pos1, pos2):
     """Return the Euclidean distance between POS1 and POS2, which are pairs.
