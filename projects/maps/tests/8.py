@@ -33,11 +33,10 @@ test = {
           >>> # Hint: Price is a perfect predictor of this user's ratings,
           >>> #       so the predicted ratings should equal the user's ratings
           >>> [round(pred(r), 5) for r in cluster] # should be a list of decimals
-          7ff97379189374b46e4c0961db89b2b4
-          # locked
+          [2.0, 5.0, 2.0, 5.0]
           """,
           'hidden': False,
-          'locked': True
+          'locked': False
         },
         {
           'code': r"""

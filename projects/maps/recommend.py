@@ -92,7 +92,12 @@ def find_predictor(user, restaurants, feature_fn):
     ys = [reviews_by_user[restaurant_name(r)] for r in restaurants]
 
     "*** YOUR CODE HERE ***"
-    b, a, r_squared = 0, 0, 0  # REPLACE THIS LINE WITH YOUR SOLUTION
+    xx = sum([pow(xi - mean(xs), 2) for xi in xs])
+    yy = sum([pow(yi - mean(ys), 2) for yi in ys])
+    xy = sum([(xi-mean(xs))*(yi-mean(ys)) for xi, yi in zip(xs, ys)])
+    
+    b = xy/xx
+    a, r_squared = mean(ys) - b*mean(xs), pow(xy, 2)/(xx*yy)  # REPLACE THIS LINE WITH YOUR SOLUTION
 
     def predictor(restaurant):
         return b * feature_fn(restaurant) + a
@@ -109,7 +114,18 @@ def best_predictor(user, restaurants, feature_fns):
     feature_fns -- A sequence of functions that each takes a restaurant
     """
     reviewed = list(user_reviewed_restaurants(user, restaurants).values())
-    "*** YOUR CODE HERE ***"
+    
+    pridectors_and_rSquareds = {}
+
+    for feature_fn in feature_fns:
+        predictor, r_squared = find_predictor(user, reviewed, feature_fn)
+        pridectors_and_rSquareds.update({r_squared: predictor})
+
+    max_r_squared = max(pridectors_and_rSquareds.keys())
+
+    return pridectors_and_rSquareds[max_r_squared]
+
+
 
 def rate_all(user, restaurants, feature_functions):
     """Return the predicted ratings of RESTAURANTS by USER using the best
@@ -122,7 +138,21 @@ def rate_all(user, restaurants, feature_functions):
     # Use the best predictor for the user, learned from *all* restaurants
     # (Note: the name RESTAURANTS is bound to a dictionary of all restaurants)
     predictor = best_predictor(user, RESTAURANTS, feature_functions)
-    "*** YOUR CODE HERE ***"
+    
+    reviewed = list(user_reviewed_restaurants(user, restaurants).values())
+
+    results = {}
+
+    reviewed_res_names = [restaurant_name(restaurant) for restaurant in reviewed] 
+
+    for restaurant in restaurants.values():
+        name = restaurant_name(restaurant)
+        if name in reviewed_res_names:
+            results.update({name:user_rating(user, name)})
+        else:
+            results.update({name:predictor(restaurant)})
+
+    return results
 
 def search(query, restaurants):
     """Return each restaurant in RESTAURANTS that has QUERY as a category.
@@ -131,7 +161,8 @@ def search(query, restaurants):
     query -- A string
     restaurants -- A sequence of restaurants
     """
-    "*** YOUR CODE HERE ***"
+    return [restaurant for restaurant in restaurants if query in restaurant_categories(restaurant)  ]
+
 
 def feature_set():
     """Return a sequence of feature functions."""

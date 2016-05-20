@@ -5,7 +5,7 @@ test = {
     {
       'cases': [
         {
-          'answer': '00da2f26abd0bee5453f3b6c48b644a0',
+          'answer': 'a dictionary of ratings keyed by restaurant names',
           'choices': [
             'a list of ratings',
             'a dictionary of ratings keyed by restaurants',
@@ -13,11 +13,11 @@ test = {
             'a list of restaurant names'
           ],
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'question': 'What does rate_all return?'
         },
         {
-          'answer': '664a09f7860d3fde8bba03bfef46762d',
+          'answer': 'a mix of ratings from the user and predicted ratings',
           'choices': [
             'a mix of ratings from the user and predicted ratings',
             'ratings from the user',
@@ -25,7 +25,7 @@ test = {
             'mean ratings of the restaurants'
           ],
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'question': 'What are the values of the returned dictionary?'
         }
       ],

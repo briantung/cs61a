@@ -5,7 +5,7 @@ test = {
     {
       'cases': [
         {
-          'answer': 'b602d98cdeeae35da8fefb2d6bc0f7bb',
+          'answer': "if the query string is one of the restaurant's categories",
           'choices': [
             "if the query string is a substring of the restaurant's name",
             "if the query string is mentioned in the restaurant's reviews",
@@ -13,7 +13,7 @@ test = {
             "if the query string is equal to the restaurant's categories"
           ],
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'question': 'When does a restaurant match a search query?'
         }
       ],
