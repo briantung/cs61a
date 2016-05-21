@@ -1,14 +1,15 @@
 def interval(a, b):
     """Construct an interval from a to b."""
-    "*** YOUR CODE HERE ***"
+    return [lower_bound([a,b]),upper_bound([a,b])]
+
 
 def lower_bound(x):
     """Return the lower bound of interval x."""
-    "*** YOUR CODE HERE ***"
+    return min(x)
 
 def upper_bound(x):
     """Return the upper bound of interval x."""
-    "*** YOUR CODE HERE ***"
+    return max(x)
 
 def str_interval(x):
     """Return a string representation of interval x.
@@ -51,7 +52,8 @@ def div_interval(x, y):
     >>> str_interval(div_interval(interval(-1, 2), interval(4, 8)))
     '-0.25 to 0.5'
     """
-    "*** YOUR CODE HERE ***"
+    assert upper_bound(y) !=0 and lower_bound(y) != 0 , "can not divide by zero"
+
     reciprocal_y = interval(1/upper_bound(y), 1/lower_bound(y))
     return mul_interval(x, reciprocal_y)
 
@@ -62,7 +64,11 @@ def sub_interval(x, y):
     >>> str_interval(sub_interval(interval(-1, 2), interval(4, 8)))
     '-9 to -2'
     """
-    "*** YOUR CODE HERE ***"
+    p1 = lower_bound(x) - lower_bound(y)
+    p2 = lower_bound(x) - upper_bound(y)
+    p3 = upper_bound(x) - lower_bound(y)
+    p4 = upper_bound(x) - upper_bound(y)
+    return interval(min(p1, p2, p3, p4), max(p1, p2, p3, p4))
 
 def par1(r1, r2):
     return div_interval(mul_interval(r1, r2), add_interval(r1, r2))
@@ -74,7 +80,10 @@ def par2(r1, r2):
     return div_interval(one, add_interval(rep_r1, rep_r2))
 
 # These two intervals give different results for parallel resistors:
-"*** YOUR CODE HERE ***"
+x1 = interval(1,2)
+x2 = interval(3,4)
+print(str_interval(par1(x1,x2)))
+print(str_interval(par2(x1,x2)))
 
 def multiple_references_explanation():
     return """The mulitple reference problem..."""
@@ -88,7 +97,9 @@ def quadratic(x, a, b, c):
     >>> str_interval(quadratic(interval(1, 3), 2, -3, 1))
     '0 to 10'
     """
-    "*** YOUR CODE HERE ***"
+    power = mul_interval(x,x)
+
+    return add_interval(mul_interval(power,a) + mul_interval(b,x),c)
 
 def polynomial(x, c):
     """Return the interval that is the range of the polynomial defined by
