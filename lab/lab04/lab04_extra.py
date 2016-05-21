@@ -7,7 +7,12 @@ def reverse_iter(lst):
     >>> reverse_iter([1, 2, 3, 4])
     [4, 3, 2, 1]
     """
-    "*** YOUR CODE HERE ***"
+    tempLst = []
+    while lst:
+        tempLst += [lst[-1]]
+        lst = lst[:-1]
+
+    return tempLst
 
 # Q10
 def mergesort(seq):
@@ -21,6 +26,15 @@ def mergesort(seq):
     [1]
     """
     "*** YOUR CODE HERE ***"
+    if len(seq)<=1:
+        return seq
+
+    mid = len(seq)//2
+
+    left = mergesort(seq[0:mid])
+    right = mergesort(seq[mid:])
+
+    return merge(left,right)
 
 # Q11
 def coords(fn, seq, lower, upper):
@@ -31,7 +45,7 @@ def coords(fn, seq, lower, upper):
     [[-2, 4], [1, 1], [3, 9]]
     """ 
     "*** YOUR CODE HERE ***"
-    return ______
+    return [[x,fn(x)] for x in seq if fn(x) >= lower and fn(x) <= upper]
 
 # Q12
 def deck(suits, numbers):
@@ -49,7 +63,7 @@ def deck(suits, numbers):
     []
     """
     "*** YOUR CODE HERE ***"
-    return ______
+    return [[suit,number] for suit in suits for number in numbers]
 
 # Q13
 def add_matrices(x, y):
@@ -62,5 +76,5 @@ def add_matrices(x, y):
     [[-2, 3], [3, 2]]
     """
     "*** YOUR CODE HERE ***"
-    return ______
+    return [ [ x[i][j] + y[i][j]  for j in range(len(x[0])) ] for i in range(len(x)) ]
 

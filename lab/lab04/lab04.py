@@ -6,7 +6,7 @@ def get_seven_a(x):
     7
     """
     "*** YOUR CODE HERE ***"
-    return ______
+    return x[2][1]
 
 def get_seven_b(x):
     """
@@ -15,7 +15,7 @@ def get_seven_b(x):
     7
     """
     "*** YOUR CODE HERE ***"
-    return ______
+    return x[0][0]
 
 def get_seven_c(x):
     """
@@ -24,7 +24,7 @@ def get_seven_c(x):
     7
     """
     "*** YOUR CODE HERE ***"
-    return ______
+    return [7][0]
 
 # Q5
 def reverse_recursive(lst):
@@ -33,8 +33,14 @@ def reverse_recursive(lst):
     >>> reverse_recursive([1, 2, 3, 4])
     [4, 3, 2, 1]
     """
-    "*** YOUR CODE HERE ***"
+    if not lst:
+        return []
 
+    return [lst[-1]] + reverse_recursive(lst[0:len(lst)-1])
+
+    # if not lst:
+    #     return []
+    # return reverse_recursive(lst[1:]) + [lst[0]]
 # Q6
 def merge(lst1, lst2):
     """Merges two sorted lists recursively.
@@ -48,7 +54,16 @@ def merge(lst1, lst2):
     >>> merge([5, 7], [2, 4, 6])
     [2, 4, 5, 6, 7]
     """
-    "*** YOUR CODE HERE ***"
+
+    if not lst1:
+        return lst2
+    if not lst2:
+        return lst1
+
+    if lst1[0] > lst2[0]:
+        return [lst2[0]] + merge(lst1,lst2[1:])
+    else:
+        return [lst1[0]] + merge(lst1[1:],lst2)
 
 # Q8
 from math import sqrt
@@ -68,5 +83,5 @@ def squares(seq):
     []
     """
     "*** YOUR CODE HERE ***"
-    return ______
+    return [ x for x in seq if is_square(x)]
 
