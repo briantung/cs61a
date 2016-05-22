@@ -21,7 +21,24 @@ def make_withdraw(balance, password):
     >>> w(10, 'l33t')
     "Your account is locked. Attempts: ['hwat', 'a', 'n00b']"
     """
-    "*** YOUR CODE HERE ***"
+    attempt_password = []
+
+    def withdraw(amount,pwd):
+        nonlocal balance
+
+        if len(attempt_password) == 3:
+            return "Your account is locked. Attempts: " + str(attempt_password)
+
+        if pwd != password:    
+            attempt_password.append(pwd)
+            return "Incorrect password"
+
+        if amount > balance:
+            return "Insufficient funds"
+        balance -= amount
+        return balance
+
+    return withdraw
 
 def make_joint(withdraw, old_password, new_password):
     """Return a password-protected withdraw function that has joint access to
@@ -61,7 +78,22 @@ def make_joint(withdraw, old_password, new_password):
     >>> make_joint(w, 'hax0r', 'hello')
     "Your account is locked. Attempts: ['my', 'secret', 'password']"
     """
-    "*** YOUR CODE HERE ***"
+    
+    def password_protected_withdraw(amount,password):
+        if password == new_password:
+            return withdraw(amount, old_password)
+        else:
+            return withdraw(amount, password)
+
+
+    result = withdraw(0,old_password)
+
+    if type(result) == str:
+        return result
+    else:
+        return password_protected_withdraw
+
+
 
 class VendingMachine:
     """A vending machine that vends some product for some price.
