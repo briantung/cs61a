@@ -25,7 +25,18 @@ def height(t):
     >>> height(numbers)
     2
     """
-    "*** YOUR CODE HERE ***"
+    if not is_tree(t):
+        return 0
+
+    if is_leaf(t):
+        return 0
+
+    depths = []
+    
+    for branch in branches(t):
+        depths += [height(branch)+1]
+
+    return max(depths)
 
 # Q6
 def acorn_finder(t):
@@ -38,8 +49,13 @@ def acorn_finder(t):
     >>> acorn_finder(numbers)
     False
     """
-    "*** YOUR CODE HERE ***"
-
+    if root(t) == 'acorn':
+        return True
+    else:
+        for branch in branches(t):
+            if acorn_finder(branch) == True:
+                return True
+        return False
 # Q7
 def preorder(t):
     """Return a list of the entries in this tree in the order that they
@@ -50,7 +66,15 @@ def preorder(t):
     >>> preorder(tree(2, [tree(4, [tree(6)])]))
     [2, 4, 6]
     """
-    "*** YOUR CODE HERE ***"
+    order = [root(t)]
+    
+    if is_leaf(t):
+        return order
+
+    for branch in branches(t):
+        order += preorder(branch)
+
+    return order
 
 ################
 # Dictionaries #
@@ -76,8 +100,8 @@ def build_successors_table(tokens):
     prev = '.'
     for word in tokens:
         if prev not in table:
-            "*** YOUR CODE HERE ***"
-        "*** YOUR CODE HERE ***"
+            table[prev] = []
+        table[prev].append(word)
         prev = word
     return table
 
@@ -89,7 +113,8 @@ def construct_sent(word, table):
     import random
     result = ' '
     while word not in ['.', '!', '?']:
-        "*** YOUR CODE HERE ***"
+        result +=word
+        word = random.choice(table[word])
     return result + word
 
 # Warning: do NOT try to print the return result of this function

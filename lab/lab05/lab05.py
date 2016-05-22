@@ -65,7 +65,7 @@ def countdown_tree():
         6
           5
     """
-    "*** YOUR CODE HERE ***"
+    return tree(10,[tree(9,[tree(8)]),tree(7,[tree(6,[tree(5)])])])
 
 # Q2
 def size_of_tree(t):
@@ -82,8 +82,15 @@ def size_of_tree(t):
     >>> size_of_tree(numbers)
     7
     """
-    "*** YOUR CODE HERE ***"
+    if is_leaf(t):
+        return 1
 
+    size = 1
+
+    for branch in branches(t):
+        size += size_of_tree(branch)
+
+    return size
 ################
 # Dictionaries #
 ################
@@ -107,5 +114,15 @@ def counter(message):
     1
     """
     word_list = message.split()
-    "*** YOUR CODE HERE ***"
+    
+    word_dict = {}
+
+    for word in word_list :
+        if word not in word_dict:
+            word_dict[word] = 1
+        else:
+            word_dict[word] += 1
+
+    return word_dict
+
 
