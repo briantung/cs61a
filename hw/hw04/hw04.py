@@ -1,6 +1,6 @@
 def interval(a, b):
     """Construct an interval from a to b."""
-    return [lower_bound([a,b]),upper_bound([a,b])]
+    return (lower_bound([a,b]),upper_bound([a,b]))
 
 
 def lower_bound(x):
@@ -80,8 +80,8 @@ def par2(r1, r2):
     return div_interval(one, add_interval(rep_r1, rep_r2))
 
 # These two intervals give different results for parallel resistors:
-x1 = interval(1,2)
-x2 = interval(3,4)
+x1 = interval(2,4)
+x2 = interval(2,4)
 print(str_interval(par1(x1,x2)))
 print(str_interval(par2(x1,x2)))
 
@@ -97,9 +97,6 @@ def quadratic(x, a, b, c):
     >>> str_interval(quadratic(interval(1, 3), 2, -3, 1))
     '0 to 10'
     """
-    power = mul_interval(x,x)
-
-    return add_interval(mul_interval(power,a) + mul_interval(b,x),c)
 
 def polynomial(x, c):
     """Return the interval that is the range of the polynomial defined by
