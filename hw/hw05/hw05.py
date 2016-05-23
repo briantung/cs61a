@@ -120,7 +120,39 @@ class VendingMachine:
     >>> v.deposit(15)
     'Machine is out of stock. Here is your $15.'
     """
-    "*** YOUR CODE HERE ***"
+    def __init__(self,stockName,stockPrice):
+        self.stockName = stockName
+        self.stockPrice = stockPrice
+        self.stockNumber = 0
+        self.balance = 0
+
+    def vend(self):
+        if self.stockNumber == 0:
+            return "Machine is out of stock."
+        elif self.balance < self.stockPrice:
+            return 'You must deposit $' + str(self.stockPrice - self.balance) + ' more.'
+        else:
+            self.stockNumber -= 1
+            change = self.balance - self.stockPrice;
+            self.balance = 0
+            if change == 0:
+                return 'Here is your ' + self.stockName + '.'
+            else:
+                return 'Here is your ' + self.stockName + ' and $'+ str(change) +' change.'
+
+
+    def deposit(self,amount):
+        self.balance += amount
+
+        if(self.stockNumber == 0):
+            return 'Machine is out of stock. Here is your $' + str(self.balance) + '.'
+
+        return "Current balance: $" + str(self.balance)
+
+    def restock(self,stockNumber):
+        self.stockNumber += stockNumber
+        return "Current " + self.stockName + " stock: " + str(self.stockNumber)
+
 
 class MissManners:
     """A container class that only forward messages that say please.
@@ -158,5 +190,20 @@ class MissManners:
     >>> fussy_three.ask('please __add__', 4)
     7
     """
-    "*** YOUR CODE HERE ***"
+
+    def __init__(self,obj):
+        self.obj = obj
+
+    def ask(self,askMessage,*args):
+
+        wordPlease = "please "
+        if not askMessage.startswith(wordPlease):
+            return "You must learn to say please first." 
+        else:
+            method = askMessage[len(wordPlease):]
+
+            if not hasattr(self.obj,method):
+                return 'Thanks for asking, but I know not how to ' + method
+            else:
+                return getattr(self.obj,method)(*args)
 
