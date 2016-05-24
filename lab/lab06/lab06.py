@@ -22,20 +22,22 @@ class Person(object):
     """
     def __init__(self, name):
         self.name = name
-        "*** YOUR CODE HERE ***"
+        self.last_sentence = "I squirreled it away before it could catch on fire."
 
     def say(self, stuff):
-        "*** YOUR CODE HERE ***"
+        self.last_sentence = stuff
         return stuff
 
     def ask(self, stuff):
+        self.last_sentence = "Would you please " + stuff
         return self.say("Would you please " + stuff)
 
     def greet(self):
+        self.last_sentence = "Hello, my name is " + self.name
         return self.say("Hello, my name is " + self.name)
 
     def repeat(self):
-        "*** YOUR CODE HERE ***"
+        return self.last_sentence
 
 # Q3
 class Account(object):
@@ -57,13 +59,13 @@ class Account(object):
     def __init__(self, account_holder):
         self.balance = 0
         self.holder = account_holder
-        "*** YOUR CODE HERE ***"
+        self.transactions = []
 
     def deposit(self, amount):
         """Increase the account balance by amount and return the
         new balance.
         """
-        "*** YOUR CODE HERE ***"
+        self.transactions.append(('deposit', amount))
         self.balance = self.balance + amount
         return self.balance
 
@@ -71,7 +73,7 @@ class Account(object):
         """Decrease the account balance by amount and return the
         new balance.
         """
-        "*** YOUR CODE HERE ***"
+        self.transactions.append(('withdraw', amount))
         if amount > self.balance:
             return 'Insufficient funds'
         self.balance = self.balance - amount
@@ -104,9 +106,13 @@ class BadBankAccount(Account):
         """Decrease the account balance by amount and return the
         new balance.
         """
-        "*** YOUR CODE HERE ***"
-        self.balance = self.balance - amount
+        if not self.overdrawn:
+            self.balance = self.balance - amount
+        else:
+            print("You have overdrawn, please add more money!")
         return self.balance
 
-    "*** YOUR CODE HERE ***"
+    @property    
+    def overdrawn(self):
+        return self.balance < 0
 
