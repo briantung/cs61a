@@ -44,7 +44,15 @@ def deep_map(f, s):
     >>> deep_map(lambda x: 2 * x, Link(s, Link(Link(Link(5)))))
     Link(Link(2, Link(Link(4, Link(6)), Link(8))), Link(Link(Link(10))))
     """
-    "*** YOUR CODE HERE ***"
+    if not isinstance(s.first,Link) and s.rest is Link.empty:
+        return Link(f(s.first),Link.empty)
+    elif not isinstance(s.first,Link):
+        return Link(f(s.first),deep_map(f,s.rest))
+    elif isinstance(s.first,Link) and s.rest is Link.empty:
+        return Link(deep_map(f,s.first),Link.empty)
+    else:
+        return Link(deep_map(f,s.first),deep_map(f,s.rest))
+
 
 def reverse(s):
     """Return a linked list with the elements of s in reverse order.
@@ -55,7 +63,14 @@ def reverse(s):
     >>> s
     Link(3, Link(5, Link(4, Link(6))))
     """
-    "*** YOUR CODE HERE ***"
+    r = Link.empty
+    temp = s
+    while temp != Link.empty:
+        r = Link(temp.first,r)
+        temp = temp.rest
+    return r
+
+
 
 def has_cycle(s):
     """Return whether Link s contains a cycle.
@@ -68,7 +83,14 @@ def has_cycle(s):
     >>> has_cycle(t)
     False
     """
-    "*** YOUR CODE HERE ***"
+    temp = s
+    while temp != Link.empty:
+        temp = temp.rest
+        if temp == s:
+            return True
+
+    return False
+    
 
 def has_cycle_constant(s):
     """Return whether Link s contains a cycle.
@@ -82,6 +104,8 @@ def has_cycle_constant(s):
     False
     """
     # Challenge: replace this line with your implementation
+
+
     return has_cycle(s)
 
 class Mobile:
@@ -118,12 +142,18 @@ class Mobile:
     @property
     def weight(self):
         """The total weight of the mobile."""
-        "*** YOUR CODE HERE ***"
+        return self.left.contents.weight + self.right.contents.weight
 
     def is_balanced(self):
         """True if and only if the mobile is balanced."""
-        "*** YOUR CODE HERE ***"
-
+        if self.left.torque != self.right.torque:
+            return False
+        else:
+            left_result = self.left.contents.is_balanced()
+            right_result = self.right.contents.is_balanced()
+            if left_result == False or right_result == False:
+                return False
+            return True
 class Branch:
     """A branch of a binary mobile."""
     def __init__(self, length, contents):
