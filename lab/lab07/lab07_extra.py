@@ -10,7 +10,10 @@ def list_to_link(lst):
     >>> list_to_link([1, 2, 3])
     Link(1, Link(2, Link(3)))
     """
-    "*** YOUR CODE HERE ***"
+    if len(lst) == 1:
+        return Link(lst[0],Link.empty)
+    else:
+        return Link(lst[0],list_to_link(lst[1:]))
 
 def link_to_list(link):
     """Takes a Link and returns a Python list with the same elements.
@@ -21,7 +24,10 @@ def link_to_list(link):
     >>> link_to_list(Link.empty)
     []
     """
-    "*** YOUR CODE HERE ***"
+    if link == Link.empty:
+        return []
+    else:
+        return [link.first] + link_to_list(link.rest)
 
 def reverse(link):
     """Returns a Link that is the reverse of the original.
@@ -34,7 +40,11 @@ def reverse(link):
     >>> link
     Link(1, Link(2, Link(3)))
     """
-    "*** YOUR CODE HERE ***"
+    new = Link(link.first)
+    while link.rest is not Link.empty:
+        link = link.rest
+        new = Link(link.first, new)
+    return new
 
 def mutate_reverse(link):
     """Mutates the Link so that its elements are reversed.
@@ -49,7 +59,12 @@ def mutate_reverse(link):
     >>> link
     Link(3, Link(2, Link(1)))
     """
-    "*** YOUR CODE HERE ***"
+    if link is Link.empty or link.rest is Link.empty:
+        return
+    mutate_reverse(link.rest)
+    while link.rest is not Link.empty:
+        link.first, link.rest.first = link.rest.first, link.first
+        link = link.rest
 
 
 # Tree Practice
@@ -62,12 +77,15 @@ def leaves(t):
     >>> leaves(Tree(1, [Tree(2, [Tree(3)]), Tree(4)]))
     [3, 4]
     """
-    "*** YOUR CODE HERE ***"
+    if t.is_leaf():
+        return [t.entry]
+    for branch in t.branches:
+        return []+leaves(branch) 
 
-def cumulative_sum(t):
+
+def cumulative_sum(t): 
     """Return a new Tree, where each entry is the sum of all entries in the
     corresponding subtree of t.
-
     >>> t = Tree(1, [Tree(3, [Tree(5)]), Tree(7)])
     >>> cumulative = cumulative_sum(t)
     >>> t
@@ -77,11 +95,16 @@ def cumulative_sum(t):
     >>> cumulative_sum(Tree(1))
     Tree(1)
     """
-    "*** YOUR CODE HERE ***"
+    branches = []
+
+    for branch in t.branches:
+        branches.append(cumulative_sum(branch))
+    new_entry = sum([branch.entry for branch in branches]) + t.entry 
+    return Tree(new_entry,branches)   
 
 def same_shape(t1, t2):
-    """Returns whether two Trees t1, t2 have the same shape. Two trees have the
-    same shape if they have the same number of branches and each of their
+    """Returns whether two Trees t1, t2 have the same shape. 
+    Two trees have the same shape if they have the same number of branches and each of their
     children have the same shape.
 
     >>> t, s = Tree(1), Tree(3)
@@ -96,8 +119,19 @@ def same_shape(t1, t2):
     >>> same_shape(t, s)
     True
     """
-    "*** YOUR CODE HERE ***"
 
+    if t1.is_leaf() and t2.is_leaf():
+        return True
+    elif t1.is_leaf() and not t2.is_leaf():
+        return False
+    elif not t1.is_leaf() and t2.is_leaf():
+        return False
+
+    if len(t1.branches) == len(t2.branches):
+        for t1_branch, t2_branch in t1.branches,t2.branches:
+            return same_shape(t1_branch,t2_branch)
+    else:
+        return False
 
 # Folding Linked Lists
 
@@ -115,8 +149,7 @@ def foldl(link, fn, z):
     """
     if link is Link.empty:
         return z
-    "*** YOUR CODE HERE ***"
-    return foldl(______, ______, ______)
+    return foldl(link.rest, fn, fn(z, link.first))
 
 def foldr(link, fn, z):
     """ Right fold
@@ -128,7 +161,9 @@ def foldr(link, fn, z):
     >>> foldr(lst, mul, 1) # (3 * (2 * (1 * 1)))
     6
     """
-    "*** YOUR CODE HERE ***"
+    if link is Link.empty:
+        return z
+    return fn(link.first , foldr(link.rest, fn, z))
 
 identity = lambda x: x
 
@@ -143,6 +178,6 @@ def foldl2(link, fn, z):
     6
     """
     def step(x, g):
-        "*** YOUR CODE HERE ***"
+        return lambda a: g(fn(a, x))
     return foldr(link, step, identity)(z)
 
