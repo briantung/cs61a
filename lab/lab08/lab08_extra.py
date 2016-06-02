@@ -14,7 +14,14 @@ def add_up(n, lst):
     >>> add_up(10, [5, 5])
     False
     """
-    "*** YOUR CODE HERE ***"
+    s = set(lst)
+    temp_s = set()
+    for x in s:
+        if not n-x == x:
+            temp_s.add(n-x) 
+    if len(temp_s.intersection(s)) > 0:
+        return True
+    return False    
 
 def pow(n,k):
     """Computes n^k.
@@ -24,7 +31,12 @@ def pow(n,k):
     >>> pow(4, 2)
     16
     """
-    "*** YOUR CODE HERE ***"
+    if k==1:
+        return n
+    elif k%2 == 0:
+        return pow(n*n,k//2)
+    else:
+        return n*pow(n,k-1)
 
 def missing_no(lst):
     """lst contains all the numbers from 1 to n for some n except some
@@ -35,7 +47,9 @@ def missing_no(lst):
     >>> missing_no(list(filter(lambda x: x != 293, list(range(2000)))))
     293
     """
-    "*** YOUR CODE HERE ***"
+    s1 = set(lst)
+    s2 = set(range(0,len(lst)+1)) 
+    return list(s2 - s1)[0]
 
 def find_duplicates_k(k, lst):
     """Returns True if there are any duplicates in lst that are within k
@@ -46,7 +60,6 @@ def find_duplicates_k(k, lst):
     >>> find_duplicates_k(4, [1, 2, 3, 4, 1])
     True
     """
-    "*** YOUR CODE HERE ***"
-
-
+    s = set(lst[:k+1])
+    return len(s) != len(lst[:k+1])
 
