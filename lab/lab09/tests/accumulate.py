@@ -7,29 +7,26 @@ test = {
         {
           'code': r"""
           scm> (accumulate + 0 4 square)
-          15652c8e697e11e5d9522f9191c2cb45
-          # locked
+          30
           """,
           'hidden': False,
-          'locked': True
+          'locked': False
         },
         {
           'code': r"""
           scm> (accumulate * 3 5 id)
-          43fd85c2b715943e3b6457454aeeaa09
-          # locked
+          360
           """,
           'hidden': False,
-          'locked': True
+          'locked': False
         },
         {
           'code': r"""
           scm> (accumulate + 0 3 add-one)
-          24501e5e22e5149e7702cb00bdfc079c
-          # locked
+          9
           """,
           'hidden': False,
-          'locked': True
+          'locked': False
         }
       ],
       'scored': False,

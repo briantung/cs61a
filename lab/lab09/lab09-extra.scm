@@ -1,5 +1,5 @@
 (define (composed f g)
-  'YOUR-CODE-HERE
+  (lambda (x)(f (g x)))
 )
 
 (define (max a b) (if (> a b) a b))
@@ -9,16 +9,29 @@
 )
 
 (define (filter f lst)
-  'YOUR-CODE-HERE
+  (if (null? lst) '()
+    (if
+       (f (car lst)) 
+       (cons (car lst) (filter f (cdr lst)))  
+       (filter f (cdr lst))
+    ))
 )
 
 (define (all-satisfies lst pred)
-  'YOUR-CODE-HERE
+   (if (null? lst) True 
+      (if (pred (car lst)) 
+        (all-satisfies (cdr lst) pred) 
+        False
+      ))
 )
 
 (define (accumulate combiner start n term)
   (if (= n 0)
       start
-      'YOUR-CODE-HERE
+      (combiner (accumulate combiner
+                            start
+                            (- n 1)
+                            term)
+                (term n))
       ))
 

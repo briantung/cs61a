@@ -7,29 +7,26 @@ test = {
         {
           'code': r"""
           scm> (cube 2)
-          2bfcd627609c82ebd017c2edfad00c89
-          # locked
+          8
           """,
           'hidden': False,
-          'locked': True
+          'locked': False
         },
         {
           'code': r"""
           scm> (cube 3)
-          748461e5d70d2d34436c8d3c5a04855e
-          # locked
+          27
           """,
           'hidden': False,
-          'locked': True
+          'locked': False
         },
         {
           'code': r"""
           scm> (cube 1)
-          7cd20da6435c318b417f99ab831ac85e
-          # locked
+          1
           """,
           'hidden': False,
-          'locked': True
+          'locked': False
         }
       ],
       'scored': True,

@@ -7,38 +7,34 @@ test = {
         {
           'code': r"""
           scm> (all-satisfies '(1 2 3 4) even?)
-          a4015fdedc66a98a3d74622fb751ee0a
-          # locked
+          False
           """,
           'hidden': False,
-          'locked': True
+          'locked': False
         },
         {
           'code': r"""
           scm> (all-satisfies '(1 3 5) odd?)
-          b2fd0f50cc6b6d79b0b844be1c0e8231
-          # locked
+          True
           """,
           'hidden': False,
-          'locked': True
+          'locked': False
         },
         {
           'code': r"""
           scm> (all-satisfies '(2 4 6) odd?)
-          a4015fdedc66a98a3d74622fb751ee0a
-          # locked
+          False
           """,
           'hidden': False,
-          'locked': True
+          'locked': False
         },
         {
           'code': r"""
           scm> (all-satisfies nil odd?)
-          b2fd0f50cc6b6d79b0b844be1c0e8231
-          # locked
+          True
           """,
           'hidden': False,
-          'locked': True
+          'locked': False
         }
       ],
       'scored': False,
