@@ -58,7 +58,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Move the following (exit) line to run additional tests. ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(exit)
 
 
 ;;; 1.1.2
@@ -155,6 +154,7 @@ circumference
 ; expect 1000.000369924366
 
 ;;; 1.1.8
+
 
 (define (sqrt x)
   (define (good-enough? guess)

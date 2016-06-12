@@ -16,8 +16,10 @@
 ; Problem 18
 ;; Turns a list of pairs into a pair of lists
 (define (zip pairs)
-  'YOUR-CODE-HERE
-  '())
+   (if (null? pairs) '(()())
+     (cons-all (car pairs) (cdr pairs)))
+    
+    )
 
 (zip '((1 2) (3 4) (5 6)))
 ; expect ((1 3 5) (2 4 6))

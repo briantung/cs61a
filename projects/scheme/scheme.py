@@ -52,8 +52,14 @@ def scheme_apply(procedure, args, env):
 
 def eval_all(expressions, env):
     """Evaluate a Scheme list of EXPRESSIONS & return the value of the last."""
-    "*** YOUR CODE HERE ***"
-    return scheme_eval(expressions.first, env)
+    if expressions == nil:
+        return okay
+    elif expressions.second == nil:
+        return scheme_eval(expressions.first, env)
+    else:
+        scheme_eval(expressions.first,env)
+        return eval_all(expressions.second,env)
+
 
 def apply_primitive(procedure, args_scheme_list, env):
     """Apply PrimitiveProcedure PROCEDURE to ARGS_SCHEME_LIST in ENV.
@@ -65,11 +71,22 @@ def apply_primitive(procedure, args_scheme_list, env):
     4
     """
     args = list(args_scheme_list) # Convert a Scheme list to a Python list
-    "*** YOUR CODE HERE ***"
+    if procedure.use_env == True:
+        args.append(env)
+    try:
+        return procedure.fn(*args)
+    except TypeError as e:
+        raise SchemeError()
+    
+
 
 def make_call_frame(procedure, args, env):
     """Make a frame that binds the formal parameters of PROCEDURE to ARGS."""
-    "*** YOUR CODE HERE ***"
+
+    if hasattr(procedure,'env'):
+        return procedure.env.make_child_frame(procedure.formals,args)
+
+    return env.make_child_frame(procedure.formals,args)
 
 ################
 # Environments #
@@ -92,7 +109,10 @@ class Frame:
 
     def lookup(self, symbol):
         """Return the value bound to SYMBOL.  Errors if SYMBOL is not found."""
-        "*** YOUR CODE HERE ***"
+        if symbol in self.bindings:
+            return self.bindings[symbol]
+        elif self.parent != None:
+            return self.parent.lookup(symbol)
         raise SchemeError("unknown identifier: {0}".format(symbol))
 
     def make_child_frame(self, formals, vals):
@@ -107,7 +127,11 @@ class Frame:
         <{a: 1, b: 2, c: 3} -> <Global Frame>>
         """
         frame = Frame(self) # Create a new frame with self as the parent
-        "*** YOUR CODE HERE ***"
+        if len(formals) != len(vals):
+            raise SchemeError("too many or too few vals are given")
+        for i in range(0,len(formals)):
+            frame.bindings[formals[i]] = vals[i]
+            
         return frame
 
     def define(self, symbol, value):
@@ -146,9 +170,11 @@ def do_define_form(expressions, env):
     target = expressions[0]
     if scheme_symbolp(target):
         check_form(expressions, 2, 2)
-        "*** YOUR CODE HERE ***"
+        env.define(target,scheme_eval(expressions[1],env))
+        return target
     elif isinstance(target, Pair) and scheme_symbolp(target.first):
-        "*** YOUR CODE HERE ***"
+        env.define(target.first,LambdaProcedure(target.second, expressions.second,env))
+        return target.first
     else:
         bad = target.first if isinstance(target, Pair) else target
         raise SchemeError("Non-symbol: {}".format(bad))
@@ -156,7 +182,7 @@ def do_define_form(expressions, env):
 def do_quote_form(expressions, env):
     """Evaluate a quote form."""
     check_form(expressions, 1, 1)
-    "*** YOUR CODE HERE ***"
+    return expressions[0]
 
 def do_begin_form(expressions, env):
     """Evaluate begin form."""
@@ -168,20 +194,36 @@ def do_lambda_form(expressions, env):
     check_form(expressions, 2)
     formals = expressions.first
     check_formals(formals)
-    "*** YOUR CODE HERE ***"
+    lambdaProcedure = LambdaProcedure(formals,expressions.second,env)
+    return lambdaProcedure
 
 def do_if_form(expressions, env):
     """Evaluate an if form."""
     check_form(expressions, 2, 3)
-    "*** YOUR CODE HERE ***"
+    if scheme_true(scheme_eval(expressions.first,env)):
+        return scheme_eval(expressions[1],env)
+    elif len(expressions) == 2:
+        return okay
+    else:
+        return scheme_eval(expressions[2],env)
 
 def do_and_form(expressions, env):
     """Evaluate a short-circuited and form."""
-    "*** YOUR CODE HERE ***"
+    result = True
+    for expression in expressions:
+        result = scheme_eval(expression,env)
+        if scheme_false(result):
+            return False
+    return result
 
 def do_or_form(expressions, env):
     """Evaluate a short-circuited or form."""
-    "*** YOUR CODE HERE ***"
+    
+    for expression in expressions:
+        result = scheme_eval(expression,env)
+        if scheme_true(result):
+            return result
+    return False
 
 def do_cond_form(expressions, env):
     """Evaluate a cond form."""
@@ -197,7 +239,14 @@ def do_cond_form(expressions, env):
         else:
             test = scheme_eval(clause.first, env)
         if scheme_true(test):
-            "*** YOUR CODE HERE ***"
+            if len(clause) == 1:
+                if i < num_clauses-1:
+                    return True
+                return scheme_eval(clause[0],env)  
+            if len(clause) == 2:
+                return scheme_eval(clause[1],env)  
+            elif len(clause) == 3:
+                return scheme_eval(clause[2],env)  
     return okay
 
 def do_let_form(expressions, env):
@@ -210,7 +259,17 @@ def make_let_frame(bindings, env):
     """Create a frame containing bindings from a let expression."""
     if not scheme_listp(bindings):
         raise SchemeError("bad bindings list in let form")
-    "*** YOUR CODE HERE ***"
+
+    formals = []
+    vals = []
+    for binds in bindings:
+        check_form(binds,1,2)
+        if not scheme_symbolp(binds.first):
+            raise SchemeError("bad bindings list in let form")
+        formals.append(binds.first)
+        vals.append(scheme_eval(binds[1],env))
+
+    return env.make_child_frame(formals,vals)
 
 SPECIAL_FORMS = {
     "and": do_and_form,
@@ -244,7 +303,15 @@ def check_formals(formals):
 
     >>> check_formals(read_line("(a b c)"))
     """
-    "*** YOUR CODE HERE ***"
+    for formal in formals:
+        if not scheme_symbolp(formal):
+            raise SchemeError("not valid parameter")
+    
+    checkSet = set(formals)
+    if len(checkSet) != len(formals):
+            raise SchemeError("repeated parameter")
+
+    return True            
 
 #################
 # Dynamic Scope #
@@ -281,7 +348,8 @@ def do_mu_form(expressions, env):
     check_form(expressions, 2)
     formals = expressions[0]
     check_formals(formals)
-    "*** YOUR CODE HERE ***"
+    muProcedure = MuProcedure(formals,expressions.second)
+    return muProcedure
 
 SPECIAL_FORMS["mu"] = do_mu_form
 
