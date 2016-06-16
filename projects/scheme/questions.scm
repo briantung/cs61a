@@ -16,10 +16,14 @@
 ; Problem 18
 ;; Turns a list of pairs into a pair of lists
 (define (zip pairs)
-   (if (null? pairs) '(()())
-     (cons-all (car pairs) (cdr pairs)))
-    
-    )
+	(if (null? pairs) '(()())
+		(begin 
+				(define first (apply-to-all (lambda (pair)(car pair)) pairs))
+				(define rest (apply-to-all (lambda (pair)(cadr pair)) pairs)) 
+				(cons first (cons rest '()))
+		)
+	)
+)
 
 (zip '((1 2) (3 4) (5 6)))
 ; expect ((1 3 5) (2 4 6))
@@ -29,12 +33,24 @@
 ; expect (() ())
 
 ; Problem 19
-
 ;; List all ways to partition TOTAL without using consecutive numbers.
 (define (list-partitions total)
-  'YOUR-CODE-HERE
-  )
+	(define (last_element l)
+  		(cond ((null? (cdr l)) (car l))
+        (else (last_element (cdr l)))))
 
+	(define (p t l k)
+		(if (or (< t 0) (<= k 0)) '() 
+			(if (= t 0) (cons l nil)
+				(begin 
+					(if (or (null? l) (not (= (abs (- (last_element l) k)) 1)))
+						(define r1 (p (- t k) (append l (cons k nil)) k))
+						(define r1 '()))
+					(define r2 (p t l (- k 1)))
+					(append r1 r2))))	
+	)
+	(p total '() total)
+)
 ; For these two tests, any permutation of the right answer will be accepted.
 (list-partitions 5)
 ; expect ((5) (4 1) (3 1 1) (1 1 1 1 1))
@@ -55,26 +71,30 @@
 ;; Converts all let special forms in EXPR into equivalent forms using lambda
 (define (analyze expr)
   (cond ((atom? expr)
-         'YOUR-CODE-HERE
+          expr 
          )
         ((quoted? expr)
-         'YOUR-CODE-HERE
+			expr
          )
         ((or (lambda? expr)
              (define? expr))
          (let ((form   (car expr))
                (params (cadr expr))
                (body   (cddr expr)))
-           'YOUR-CODE-HERE
+				(cons form (cons params (analyze body) ))	
            ))
         ((let? expr)
          (let ((values (cadr expr))
                (body   (cddr expr)))
-           'YOUR-CODE-HERE
+				(cons (cons 'lambda 
+						   (cons (car (zip values)) 
+								(apply-to-all analyze body))) 
+					(apply-to-all analyze (cadr (zip values))))		
            ))
         (else
-         'YOUR-CODE-HERE
-         )))
+			(apply-to-all analyze expr)
+        	;(if (pair? expr) (cons (if (pair? (car expr)) (analyze (car expr)) (car expr)) (analyze (cdr expr)))expr)
+		)))
 
 (analyze 1)
 ; expect 1
