@@ -55,9 +55,9 @@ def eval_all(expressions, env):
     if expressions == nil:
         return okay
     elif expressions.second == nil:
-        return scheme_eval(expressions.first, env)
+        return scheme_eval(expressions.first, env,True)
     else:
-        scheme_eval(expressions.first,env)
+        scheme_eval(expressions.first,env,True)
         return eval_all(expressions.second,env)
 
 
@@ -201,11 +201,11 @@ def do_if_form(expressions, env):
     """Evaluate an if form."""
     check_form(expressions, 2, 3)
     if scheme_true(scheme_eval(expressions.first,env)):
-        return scheme_eval(expressions[1],env)
+        return scheme_eval(expressions[1],env,True)
     elif len(expressions) == 2:
         return okay
     else:
-        return scheme_eval(expressions[2],env)
+        return scheme_eval(expressions[2],env,True)
 
 def do_and_form(expressions, env):
     """Evaluate a short-circuited and form."""
@@ -242,11 +242,11 @@ def do_cond_form(expressions, env):
             if len(clause) == 1:
                 if i < num_clauses-1:
                     return True
-                return scheme_eval(clause[0],env)  
+                return scheme_eval(clause[0],env,True)  
             if len(clause) == 2:
-                return scheme_eval(clause[1],env)  
+                return scheme_eval(clause[1],env,True)  
             elif len(clause) == 3:
-                return scheme_eval(clause[2],env)  
+                return scheme_eval(clause[2],env,True)  
     return okay
 
 def do_let_form(expressions, env):
@@ -373,7 +373,8 @@ def scheme_optimized_eval(expr, env, tail=False):
         return expr
 
     if tail:
-        "*** YOUR CODE HERE ***"
+        #print(expr)
+        return Evaluate(expr,env)
     else:
         result = Evaluate(expr, env)
 
@@ -394,7 +395,7 @@ def scheme_optimized_eval(expr, env, tail=False):
 ################################################################
 # Uncomment the following line to apply tail call optimization #
 ################################################################
-# scheme_eval = scheme_optimized_eval
+#scheme_eval = scheme_optimized_eval
 
 
 ################
