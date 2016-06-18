@@ -57,7 +57,7 @@ def eval_all(expressions, env):
     elif expressions.second == nil:
         return scheme_eval(expressions.first, env,True)
     else:
-        scheme_eval(expressions.first,env,True)
+        scheme_eval(expressions.first,env)
         return eval_all(expressions.second,env)
 
 
@@ -210,17 +210,26 @@ def do_if_form(expressions, env):
 def do_and_form(expressions, env):
     """Evaluate a short-circuited and form."""
     result = True
+    i = 0
     for expression in expressions:
-        result = scheme_eval(expression,env)
+        i += 1
+        if i == len(expressions):
+            result = scheme_eval(expression,env,True)
+        else:		
+            result = scheme_eval(expression,env)
         if scheme_false(result):
             return False
     return result
 
 def do_or_form(expressions, env):
     """Evaluate a short-circuited or form."""
-    
+    i = 0
     for expression in expressions:
-        result = scheme_eval(expression,env)
+        i += 1
+        if i == len(expressions):
+            result = scheme_eval(expression,env,True)
+        else:		
+            result = scheme_eval(expression,env)
         if scheme_true(result):
             return result
     return False
@@ -395,7 +404,7 @@ def scheme_optimized_eval(expr, env, tail=False):
 ################################################################
 # Uncomment the following line to apply tail call optimization #
 ################################################################
-#scheme_eval = scheme_optimized_eval
+scheme_eval = scheme_optimized_eval
 
 
 ################
