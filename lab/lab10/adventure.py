@@ -42,12 +42,39 @@ def adv_parse(line):
         raise SyntaxError('No command given')
     token = tokens.pop(0) # https://docs.python.org/3/tutorial/datastructures.html
     if token == 'give':
-        "*** YOUR CODE HERE ***"
-    elif token == 'ask':
-        "*** YOUR CODE HERE ***"
-    else: # Only split out the operator, the rest must be the operand
-        "*** YOUR CODE HERE ***"
+    	result = (token,)
+    	rest = ''	
+    	for rest_token in tokens:
+    		if rest_token == 'to':
+    			result += (rest[:-1],)
+    			rest = ''	
+    		else:
+    			rest += (rest_token + ' ')
+    	
+    	result += (rest[:-1],)
+    	return result
 
+    elif token == 'ask':
+        result = (token,)
+        rest = ''	
+        for rest_token in tokens:
+            if rest_token == 'for':
+                result += (rest[:-1],)
+                rest = ''	
+            else:
+                rest += (rest_token + ' ')
+            
+        result += (rest[:-1],)
+        return result
+
+    else: # Only split out the operator, the rest must be the operand
+    	if len(tokens) == 0:
+    		return (token,'')	
+    	else:
+    		rest = ''
+    		for rest_token in tokens:
+    			rest += (rest_token + ' ')
+    		return (token,rest[:-1])
 
 def adv_eval(exp):
     """
@@ -66,15 +93,24 @@ def adv_eval(exp):
     elif isinstance(exp, str): # If we're describing something,
         return exp             # just output it.
     elif exp[0] == 'give':
-        "*** YOUR CODE HERE ***"
+        return give(Person.people[exp[2]],exp[1])
     elif exp[0] == 'ask':
-        "*** YOUR CODE HERE ***"
+       	return ask(Person(exp[1]),exp[2]) 
     else:
-        "*** YOUR CODE HERE ***"
+       	return adv_apply(exp[0],exp[1]) 
 
 
 def adv_apply(operator, operand):
-    "*** YOUR CODE HERE ***"
+    if "look" == operator:
+       return look()
+    elif "take" == operator:
+        return take(operand) 
+    elif "go" == operator:
+   	    return go(operand)
+    elif "examine" == operator:
+   	    return examine(operand)
+    elif "help" == operator:
+   	    return help()
 
 def is_person(exp):
     return exp in Person.people
