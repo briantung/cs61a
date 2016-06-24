@@ -45,7 +45,10 @@ def add_streams(s1, s2):
     >>> added.rest.rest.first
     14
     """
-    "*** YOUR CODE HERE ***"
+    def add_s():
+        return add_streams(s1.rest,s2.rest)
+
+    return Stream(s1.first + s2.first, add_s)
 
 def make_fib_stream():
     """Return a stream containing the Fib sequence.
@@ -58,7 +61,16 @@ def make_fib_stream():
     >>> fib.rest.rest.rest.rest.first
     3
     """
-    "*** YOUR CODE HERE ***"
+
+    def fib(n):
+        if n == 0 or n==1:
+            return n
+        return fib(n-1) + fib(n-2)
+        
+    def make_fib(first):
+        return Stream(fib(first),lambda:make_fib(first+1))  
+
+    return make_fib(0) 
 
 def filter_stream(filter_func, stream):
     def make_filtered_rest():
@@ -85,4 +97,7 @@ def interleave(stream1, stream2):
     >>> alternating.rest.rest.rest.first
     1
     """     
-    "*** YOUR CODE HERE ***"
+    def make_interleave():
+        return interleave(stream2,stream1.rest) 
+
+    return Stream(stream1.first,make_interleave) 
